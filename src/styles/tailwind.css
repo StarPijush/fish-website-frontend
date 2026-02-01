@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary - Ocean Blue */
+    --color-primary: 10 75 120; /* #0A4B78 - deep ocean blue */
+    --color-primary-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Secondary - Coral */
+    --color-secondary: 255 107 53; /* #FF6B35 - coral orange */
+    --color-secondary-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Accent - Aqua */
+    --color-accent: 0 217 255; /* #00D9FF - bright cyan */
+    --color-accent-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Background */
+    --color-background: 232 244 248; /* #E8F4F8 - light ocean */
+    --color-foreground: 13 31 45; /* #0D1F2D - dark text */
+    
+    /* Muted */
+    --color-muted: 184 212 224; /* #B8D4E0 - muted blue */
+    --color-muted-foreground: 74 95 107; /* #4A5F6B - muted text */
+    
+    /* Card */
+    --color-card: 255 255 255; /* #FFFFFF - white */
+    --color-card-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Popover */
+    --color-popover: 255 255 255; /* #FFFFFF - white */
+    --color-popover-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Border */
+    --color-border: 184 212 224; /* #B8D4E0 - muted blue */
+    --color-input: 255 255 255; /* #FFFFFF - white */
+    --color-ring: 0 217 255; /* #00D9FF - accent */
+    
+    /* Success */
+    --color-success: 16 185 129; /* #10B981 - emerald-500 */
+    --color-success-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Warning */
+    --color-warning: 245 158 11; /* #F59E0B - amber-500 */
+    --color-warning-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Error */
+    --color-error: 239 68 68; /* #EF4444 - red-500 */
+    --color-error-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Destructive */
+    --color-destructive: 239 68 68; /* #EF4444 - red-500 */
+    --color-destructive-foreground: 255 255 255; /* #FFFFFF - white */
+    
+    /* Radius */
+    --radius: 0.75rem; /* 12px */
+  }
+
+  .dark {
+    /* Primary - Lighter Ocean Blue for dark mode */
+    --color-primary: 56 189 248; /* #38BDF8 - sky-400 */
+    --color-primary-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Secondary - Softer Coral */
+    --color-secondary: 251 146 60; /* #FB923C - orange-400 */
+    --color-secondary-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Accent - Bright Aqua */
+    --color-accent: 34 211 238; /* #22D3EE - cyan-400 */
+    --color-accent-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Background */
+    --color-background: 13 31 45; /* #0D1F2D - deep ocean dark */
+    --color-foreground: 241 245 249; /* #F1F5F9 - light text */
+    
+    /* Muted */
+    --color-muted: 30 58 79; /* #1E3A4F - dark muted blue */
+    --color-muted-foreground: 148 163 184; /* #94A3B8 - slate-400 */
+    
+    /* Card */
+    --color-card: 20 45 65; /* #142D41 - dark card */
+    --color-card-foreground: 241 245 249; /* #F1F5F9 - light */
+    
+    /* Popover */
+    --color-popover: 20 45 65; /* #142D41 - dark */
+    --color-popover-foreground: 241 245 249; /* #F1F5F9 - light */
+    
+    /* Border */
+    --color-border: 30 58 79; /* #1E3A4F - dark border */
+    --color-input: 20 45 65; /* #142D41 - dark input */
+    --color-ring: 34 211 238; /* #22D3EE - cyan-400 */
+    
+    /* Success */
+    --color-success: 34 197 94; /* #22C55E - green-500 */
+    --color-success-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Warning */
+    --color-warning: 251 191 36; /* #FBBF24 - amber-400 */
+    --color-warning-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Error */
+    --color-error: 248 113 113; /* #F87171 - red-400 */
+    --color-error-foreground: 13 31 45; /* #0D1F2D - dark */
+    
+    /* Destructive */
+    --color-destructive: 248 113 113; /* #F87171 - red-400 */
+    --color-destructive-foreground: 13 31 45; /* #0D1F2D - dark */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes wave-motion {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-20px) translateY(-10px);
+  }
+}
+
+@keyframes light-ray {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateX(-50%) rotate(10deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateX(-50%) rotate(15deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation Utility Classes */
+.animate-fade-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-bubble {
+  animation: bubble-rise 15s linear infinite;
+}
+
+.animate-wave {
+  animation: wave-motion 20s ease-in-out infinite;
+}
+
+.animate-light-ray {
+  animation: light-ray 10s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Animation Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-1000 { animation-delay: 1000ms; }
+.delay-2000 { animation-delay: 2000ms; }
+.delay-3000 { animation-delay: 3000ms; }
+.delay-5000 { animation-delay: 5000ms; }
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(20, 45, 65, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass-card {
+  background: rgba(20, 45, 65, 0.95);
+  border: 1px solid rgba(30, 58, 79, 0.5);
+}
+
+/* Scroll Snap */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+/* Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Grayscale Hover Effect */
+.grayscale-hover {
+  filter: grayscale(80%);
+  transition: filter 0.7s ease-in-out;
+}
+
+.grayscale-hover:hover {
+  filter: grayscale(0%);
+}
+
+/* Ocean Background Utilities */
+.ocean-gradient {
+  background: linear-gradient(180deg, 
+    rgb(10, 75, 120) 0%, 
+    rgb(0, 217, 255) 50%, 
+    rgb(232, 244, 248) 100%
+  );
+}
+
+.ocean-gradient-light {
+  background: linear-gradient(180deg, 
+    rgba(0, 217, 255, 0.1) 0%, 
+    rgba(232, 244, 248, 0.5) 100%
+  );
+}
