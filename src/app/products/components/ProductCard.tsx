@@ -79,14 +79,14 @@ export default function ProductCard({
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <AppImage
-            src={fish.image}
-            alt={fish.alt}
-            fill
-            className={`object-cover transition-all duration-700 ${
-              fish.status !== "out_of_stock"
-                ? "grayscale-hover"
-                : "grayscale"
-            }`}
+             src={fish.image || "/assets/images/no_image.png"}
+             alt={fish.alt || fish.name || "Product image"}
+             fill
+             className={`object-cover transition-all duration-700 ${
+                fish.status !== "out_of_stock"
+                   ? "grayscale-hover"
+                   : "grayscale"
+             }`}
           />
 
           {/* Sustainability Badge */}

@@ -1,39 +1,30 @@
-import React from 'react';
-import type { Metadata, Viewport } from 'next';
-import '../styles/index.css';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import ClientBody from './ClientBody';
+import type { Metadata, Viewport } from 'next'
+import '../styles/index.css'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-};
+}
 
 export const metadata: Metadata = {
-  title: 'Next.js with Tailwind CSS',
-  description: 'A boilerplate project with Next.js and Tailwind CSS',
-  icons: {
-    icon: [
-      { url: '/favicon.ico', type: 'image/x-icon' }
-    ],
-  },
-};
+  title: 'FreshCatch',
+  description: 'Ocean-fresh seafood delivered to your door.',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <ClientBody>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <ThemeProvider>
           {children}
         </ThemeProvider>
-
-        <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Ffreshcatch6175back.builtwithrocket.new&_be=https%3A%2F%2Fappanalytics.rocket.new&_v=0.1.16" />
-        <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2" />
-      </ClientBody>
+      </body>
     </html>
-  );
+  )
 }
+
