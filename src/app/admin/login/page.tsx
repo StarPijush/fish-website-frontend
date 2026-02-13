@@ -1,61 +1,226 @@
 "use client"
 
 import { useState } from "react"
-import PasswordForm from "./PasswordForm"
-import OtpForm from "./OtpForm"
+import { useRouter } from "next/navigation"
+import {
+  loginWithPassword,
+  sendOTP,
+  verifyOTP,
+} from "@/lib/api/auth"
 
-export default function AdminLoginPage() {
-  const [mobile, setMobile] = useState("")
-  const [mode, setMode] = useState<"password" | "otp" | null>(null)
+export default function AdminLogin() {
+  const router = useRouter()
+
+  const [mode, setMode] = useState<"password" | "otp">("password")
+  const [step, setStep] = useState<
+    "login" | "otpVerify" | "resetOtp" | "newPassword"
+  >("login")
+
+  const [phone, setPhone] = useState("")
+  const [password, setPassword] = useState("")
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""])
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const fullOTP = otp.join("")
+
+  const handlePasswordLogin = async () => {
+    setLoading(true)
+    const success = await loginWithPassword(phone, password)
+
+    if (success) router.push("/admin/dashboard")
+    else setError("Invalid credentials")
+
+    setLoading(false)
+  }
+
+  const handleSendOTP = async () => {
+    setLoading(true)
+    const success = await sendOTP(phone)
+
+    if (success) {
+      setStep("otpVerify")
+    } else {
+      setError("Invalid mobile number")
+    }
+
+    setLoading(false)
+  }
+
+  const handleVerifyOTP = async () => {
+    setLoading(true)
+    const success = await verifyOTP(fullOTP)
+
+    if (success) {
+      if (step === "resetOtp") setStep("newPassword")
+      else router.push("/admin/dashboard")
+    } else {
+      setError("Invalid OTP")
+    }
+
+    setLoading(false)
+  }
+
+  const handleResetPassword = () => {
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+
+    localStorage.setItem("freshcatch_admin_password", newPassword)
+    setStep("login")
+    setError("")
+  }
+
+  const handleOTPChange = (value: string, index: number) => {
+    if (!/^[0-9]?$/.test(value)) return
+
+    const updated = [...otp]
+    updated[index] = value
+    setOtp(updated)
+
+    if (value && index < 5) {
+      const next = document.getElementById(`otp-${index + 1}`)
+      next?.focus()
+    }
+  }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#020617] via-[#0c4a6e] to-[#0369a1]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 to-slate-900 text-white p-4">
 
-      {/* Glow Background */}
-      <div className="absolute w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] top-[-150px] right-[-150px]" />
-      <div className="absolute w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[120px] bottom-[-120px] left-[-120px]" />
+      <div className="w-full max-w-md bg-slate-900/80 backdrop-blur-lg border border-slate-800 rounded-2xl p-8 space-y-6 shadow-2xl">
 
-      <div className="relative w-full max-w-md p-10 rounded-3xl glass ocean-glow">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-primary">
+            FreshCatch Admin
+          </h1>
+          <p className="text-slate-400 text-sm">
+            Secure access to your dashboard
+          </p>
+        </div>
 
-        <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-          Admin Access
-        </h1>
+        {error && (
+          <p className="text-red-400 text-sm text-center">{error}</p>
+        )}
 
-        {!mode && (
+        {step === "login" && (
           <>
             <input
-              type="tel"
-              placeholder="Enter Mobile Number"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              className="w-full p-4 rounded-xl input-dark mb-6 text-white placeholder-gray-400"
+              type="text"
+              placeholder="Mobile Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary"
             />
 
-            <div className="space-y-4">
+            <div className="flex justify-center gap-6 text-sm">
               <button
                 onClick={() => setMode("password")}
-                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 transition font-semibold shadow-lg shadow-cyan-500/30"
+                className={mode === "password" ? "text-primary" : "text-slate-400"}
               >
-                Login with Password
+                Password
               </button>
-
               <button
                 onClick={() => setMode("otp")}
-                className="w-full py-3 rounded-xl bg-blue-700 hover:bg-blue-800 transition font-semibold shadow-lg shadow-blue-500/30"
+                className={mode === "otp" ? "text-primary" : "text-slate-400"}
               >
-                Login with OTP
+                OTP
               </button>
             </div>
+
+            {mode === "password" && (
+              <>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3"
+                />
+
+                <button
+                  onClick={handlePasswordLogin}
+                  className="w-full bg-primary py-3 rounded-xl font-semibold hover:scale-105 transition"
+                >
+                  Login
+                </button>
+              </>
+            )}
+
+            {mode === "otp" && (
+              <button
+                onClick={handleSendOTP}
+                className="w-full bg-primary py-3 rounded-xl font-semibold"
+              >
+                Send OTP
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                setStep("resetOtp")
+                sendOTP(phone)
+              }}
+              className="text-xs text-slate-400 hover:text-white text-center w-full"
+            >
+              Forgot Password?
+            </button>
           </>
         )}
 
-        {mode === "password" && (
-          <PasswordForm mobile={mobile} goBack={() => setMode(null)} />
+        {(step === "otpVerify" || step === "resetOtp") && (
+          <>
+            <div className="flex justify-center gap-3">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`otp-${index}`}
+                  value={digit}
+                  onChange={(e) => handleOTPChange(e.target.value, index)}
+                  maxLength={1}
+                  className="w-12 h-12 text-center text-xl bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-primary"
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={handleVerifyOTP}
+              className="w-full bg-primary py-3 rounded-xl font-semibold"
+            >
+              Verify OTP
+            </button>
+          </>
         )}
 
-        {mode === "otp" && (
-          <OtpForm mobile={mobile} goBack={() => setMode(null)} />
+        {step === "newPassword" && (
+          <>
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3"
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3"
+            />
+
+            <button
+              onClick={handleResetPassword}
+              className="w-full bg-primary py-3 rounded-xl font-semibold"
+            >
+              Update Password
+            </button>
+          </>
         )}
+
       </div>
     </div>
   )
